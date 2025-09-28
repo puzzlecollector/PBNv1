@@ -1,0 +1,288 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>별별포럼: 오늘의 운세 & 꿈해몽</title>
+  <style>
+    :root{
+      --brand:#6b5cff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+      --card:#fff; --chip:#f8fafc; --bg:#f6f7fb;
+      --shadow:0 10px 30px rgba(15,23,42,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:24px 16px}
+    /* Header / Tabs */
+    .header{display:flex;align-items:center;justify-content:space-between;margin:10px 0 18px}
+    .logo{font-weight:900;letter-spacing:.2px}
+    .logo a{color:var(--brand)}
+    .tabs{
+      display:flex;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);
+      border-radius:12px;padding:6px; box-shadow:var(--shadow);
+    }
+    .tab{
+      padding:10px 14px;border-radius:10px;
+      color:#1f2937; border:1px solid transparent; background:transparent; font-weight:700;
+    }
+    .tab:hover{background:var(--chip)}
+    .tab.active{background:rgba(107,92,255,.08); color:var(--brand); border-color:rgba(107,92,255,.25)}
+    /* Board */
+    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+    .board-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .board-title{margin:0;font-size:18px;font-weight:800}
+    .list{display:flex;flex-direction:column}
+    .row{
+      display:grid;grid-template-columns:1fr 140px 96px; gap:10px;
+      padding:12px 10px;border-top:1px solid var(--line); align-items:center;
+    }
+    .row:first-child{border-top:none}
+    .title{display:flex;align-items:center;gap:8px;min-width:0}
+    .title .badge{font-size:11px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#4f46e5;font-weight:700}
+    .title a{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .meta{color:var(--muted);font-size:13px;text-align:right}
+    .author{color:#0f172a;font-weight:600;font-size:13px; text-align:center}
+    /* Pagination */
+    .pagination{display:flex;gap:6px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+    .page-btn{
+      min-width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;
+      border:1px solid var(--line);border-radius:10px;background:#fff;padding:0 10px;
+    }
+    .page-btn:hover{border-color:#cbd5e1}
+    .page-btn.active{border-color:var(--brand); color:var(--brand); font-weight:800; background:#f5f7ff}
+    .page-btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+    @media (max-width:900px){
+      .row{grid-template-columns:1fr 86px 82px}
+      .tabs{gap:6px}
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+
+    <!-- Header / Tabs -->
+    <div class="header">
+      <div class="logo"><a href="?tab={{ active_tab|default:'fortune' }}">별별포럼</a></div>
+      <nav class="tabs" role="tablist" aria-label="Boards">
+        <a class="tab {% if active_tab == 'fortune' or not active_tab %}active{% endif %}" href="?tab=fortune" role="tab" aria-selected="{% if active_tab == 'fortune' or not active_tab %}true{% else %}false{% endif %}">오늘의 운세</a>
+        <a class="tab {% if active_tab == 'dream' %}active{% endif %}" href="?tab=dream" role="tab" aria-selected="{% if active_tab == 'dream' %}true{% else %}false{% endif %}">꿈 해몽</a>
+        <a class="tab {% if active_tab == 'free' %}active{% endif %}" href="?tab=free" role="tab" aria-selected="{% if active_tab == 'free' %}true{% else %}false{% endif %}">자유게시판</a>
+      </nav>
+    </div>
+
+    <!-- ===== Fortune Board ===== -->
+    {% if active_tab == 'fortune' or not active_tab %}
+    <section class="card" id="board-fortune">
+      <div class="board-head">
+        <h3 class="board-title">오늘의 운세</h3>
+      </div>
+      <div class="list">
+        {% for p in page_obj_fortune %}
+          <div class="row">
+            <div class="title">
+              {% if p.is_hot %}<span class="badge">HOT</span>{% endif %}
+              <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+              <span class="meta" style="margin-left:6px">♥ {{ p.like_count }}</span>
+            </div>
+            <div class="author">{{ p.author_display }}</div>
+            <div class="meta">{{ p.created_at|date:"Y-m-d H:i" }}</div>
+          </div>
+        {% empty %}
+          <div class="row"><div class="title"><span class="meta">작성된 글이 없습니다.</span></div><div></div><div></div></div>
+        {% endfor %}
+      </div>
+      <!-- pagination -->
+      {% with page=page_obj_fortune tab='fortune' %}
+    <nav class="pagination" aria-label="fortune pagination">
+      <!-- first -->
+      <a class="page-btn"
+         {% if page.number > 1 %}
+           href="?tab={{ tab }}&page=1"
+         {% else %}
+           href="#" aria-disabled="true"
+         {% endif %}
+      >«</a>
+
+      <!-- prev -->
+      <a class="page-btn"
+         {% if page.has_previous %}
+           href="?tab={{ tab }}&page={{ page.previous_page_number }}"
+         {% else %}
+           href="#" aria-disabled="true"
+         {% endif %}
+      >‹</a>
+
+      {% for num in page.paginator.page_range %}
+        {% if num >= page.number|add:"-2" and num <= page.number|add:"2" %}
+          <a class="page-btn {% if page.number == num %}active{% endif %}"
+             href="?tab={{ tab }}&page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      <!-- next -->
+      <a class="page-btn"
+         {% if page.has_next %}
+           href="?tab={{ tab }}&page={{ page.next_page_number }}"
+         {% else %}
+           href="#" aria-disabled="true"
+         {% endif %}
+      >›</a>
+
+      <!-- last -->
+      <a class="page-btn"
+         {% if page.number < page.paginator.num_pages %}
+           href="?tab={{ tab }}&page={{ page.paginator.num_pages }}"
+         {% else %}
+           href="#" aria-disabled="true"
+         {% endif %}
+      >»</a>
+    </nav>
+    {% endwith %}
+
+    </section>
+    {% endif %}
+
+    <!-- ===== Dream Board ===== -->
+    {% if active_tab == 'dream' %}
+    <section class="card" id="board-dream">
+      <div class="board-head">
+        <h3 class="board-title">꿈 해몽</h3>
+      </div>
+      <div class="list">
+        {% for p in page_obj_dream %}
+          <div class="row">
+            <div class="title">
+              {% if p.is_hot %}<span class="badge">HOT</span>{% endif %}
+              <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+            </div>
+            <div class="author">{{ p.author_display }}</div>
+            <div class="meta">{{ p.created_at|date:"Y-m-d H:i" }}</div>
+          </div>
+        {% empty %}
+          <div class="row"><div class="title"><span class="meta">작성된 글이 없습니다.</span></div><div></div><div></div></div>
+        {% endfor %}
+      </div>
+      {% with page=page_obj_dream tab='dream' %}
+      <nav class="pagination" aria-label="dream pagination">
+        <!-- first -->
+        <a class="page-btn"
+           {% if page.number > 1 %}
+             href="?tab={{ tab }}&page=1"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >«</a>
+
+        <!-- prev -->
+        <a class="page-btn"
+           {% if page.has_previous %}
+             href="?tab={{ tab }}&page={{ page.previous_page_number }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >‹</a>
+
+        {% for num in page.paginator.page_range %}
+          {% if num >= page.number|add:"-2" and num <= page.number|add:"2" %}
+            <a class="page-btn {% if page.number == num %}active{% endif %}"
+               href="?tab={{ tab }}&page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        <!-- next -->
+        <a class="page-btn"
+           {% if page.has_next %}
+             href="?tab={{ tab }}&page={{ page.next_page_number }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >›</a>
+
+        <!-- last -->
+        <a class="page-btn"
+           {% if page.number < page.paginator.num_pages %}
+             href="?tab={{ tab }}&page={{ page.paginator.num_pages }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >»</a>
+      </nav>
+      {% endwith %}
+    </section>
+    {% endif %}
+
+    <!-- ===== Free Board ===== -->
+    {% if active_tab == 'free' %}
+    <section class="card" id="board-free">
+      <div class="board-head">
+        <h3 class="board-title">자유게시판</h3>
+      </div>
+      <div class="list">
+        {% for p in page_obj_free %}
+          <div class="row">
+            <div class="title">
+              {% if p.is_hot %}<span class="badge">HOT</span>{% endif %}
+              <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
+            </div>
+            <div class="author">{{ p.author_display }}</div>
+            <div class="meta">{{ p.created_at|date:"Y-m-d H:i" }}</div>
+          </div>
+        {% empty %}
+          <div class="row"><div class="title"><span class="meta">작성된 글이 없습니다.</span></div><div></div><div></div></div>
+        {% endfor %}
+      </div>
+      {% with page=page_obj_free tab='free' %}
+      <nav class="pagination" aria-label="free pagination">
+        <!-- first -->
+        <a class="page-btn"
+           {% if page.number > 1 %}
+             href="?tab={{ tab }}&page=1"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >«</a>
+
+        <!-- prev -->
+        <a class="page-btn"
+           {% if page.has_previous %}
+             href="?tab={{ tab }}&page={{ page.previous_page_number }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >‹</a>
+
+        {% for num in page.paginator.page_range %}
+          {% if num >= page.number|add:"-2" and num <= page.number|add:"2" %}
+            <a class="page-btn {% if page.number == num %}active{% endif %}"
+               href="?tab={{ tab }}&page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        <!-- next -->
+        <a class="page-btn"
+           {% if page.has_next %}
+             href="?tab={{ tab }}&page={{ page.next_page_number }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >›</a>
+
+        <!-- last -->
+        <a class="page-btn"
+           {% if page.number < page.paginator.num_pages %}
+             href="?tab={{ tab }}&page={{ page.paginator.num_pages }}"
+           {% else %}
+             href="#" aria-disabled="true"
+           {% endif %}
+        >»</a>
+      </nav>
+      {% endwith %}
+    </section>
+    {% endif %}
+
+  </main>
+</body>
+</html>
