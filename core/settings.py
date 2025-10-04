@@ -10,10 +10,48 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+# core/settings.py
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+DEBUG = True
+ALLOWED_HOSTS = []
+
+# --- 정적 파일 ---
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]      # ← static 폴더를 실제로 만들거나, 아예 주석 처리
+STATIC_ROOT = BASE_DIR / "staticfiles"        # (배포용 collectstatic 대상)
+
+# --- 미디어(업로드) ---
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Summernote (그대로 OK)
+SUMMERNOTE_CONFIG = {
+    'summernote': {
+        'width': '100%',
+        'height': '420px',
+        # 툴바에 정렬/문단 메뉴를 명시적으로 노출
+        'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],  # paragraph 안에 좌/가운데/우 정렬
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']],
+        ],
+        # 이미지 팝오버에 사이즈/정렬 버튼
+        'popover': {
+            'image': [
+                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']],
+            ],
+        },
+    },
+    'attachment_require_authentication': False,
+}
 
 
 
@@ -38,6 +76,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_summernote",
     "blog",
 ]
 

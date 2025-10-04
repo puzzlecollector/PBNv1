@@ -1,6 +1,7 @@
 from django import forms
 from .models import Comment
 
+
 class CommentForm(forms.ModelForm):
     username = forms.CharField(
         label="이름",

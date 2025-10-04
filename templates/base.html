@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}별별포럼{% endblock %}</title>
+  <title>{% block title %}Trend Maxi{% endblock %}</title>
   <style>
     :root{ --brand:#6b5cff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --card:#fff; --chip:#f8fafc; --bg:#f6f7fb; --shadow:0 10px 30px rgba(15,23,42,.06); }
     *{box-sizing:border-box}
@@ -45,7 +45,7 @@
   <main class="container">
     <!-- 공통 헤더/탭 -->
     <div class="header">
-      <div class="logo"><a href="?tab={{ active_tab|default:'fortune' }}">별별포럼</a></div>
+      <div class="logo"><a href="?tab={{ active_tab|default:'fortune' }}">Trend Maxi</a></div>
       <nav class="tabs" role="tablist" aria-label="Boards">
         <a class="tab {% if active_tab == 'fortune' or not active_tab %}active{% endif %}" href="?tab=fortune" role="tab" aria-selected="{% if active_tab == 'fortune' or not active_tab %}true{% else %}false{% endif %}">오늘의 운세</a>
         <a class="tab {% if active_tab == 'dream' %}active{% endif %}" href="?tab=dream" role="tab" aria-selected="{% if active_tab == 'dream' %}true{% else %}false{% endif %}">꿈 해몽</a>
