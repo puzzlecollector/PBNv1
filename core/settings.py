@@ -156,8 +156,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# static & media
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"   # 배포용 수집 폴더 (이름을 staticfiles 로 권장)
+# 개발 시 직접 넣은 정적 자산 폴더가 따로 없으면 STATICFILES_DIRS 는 지우세요.
+# STATICFILES_DIRS = [BASE_DIR / "static"]  # <-- 없다면 주석/삭제
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
