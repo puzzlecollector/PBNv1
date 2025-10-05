@@ -15,7 +15,9 @@
   <!-- OG 이미지(절대 URL) 준비 -->
   {% static 'img/og-cover.png' as DEFAULT_OG_PATH %}
   {% with BASE=request.scheme|add:"://"|add:request.get_host %}
-  {% with ogimg=(post.og_image|default:BASE|add:DEFAULT_OG_PATH) %}
+  {% with DEFAULT_OG_ABS=BASE|add:DEFAULT_OG_PATH %}
+  {% with ogimg=post.og_image|default:DEFAULT_OG_ABS %}
+
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Trend Maxi">
@@ -30,6 +32,8 @@
     <meta name="twitter:title" content="{{ post.title }}">
     <meta name="twitter:description" content="{{ post.title }} — Trend Maxi">
     <meta name="twitter:image" content="{{ ogimg }}">
+
+  {% endwith %}
   {% endwith %}
   {% endwith %}
 
