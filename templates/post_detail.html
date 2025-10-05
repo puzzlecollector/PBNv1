@@ -6,21 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ post.title }} · Trend Maxi</title>
 
-  {# Canonical #}
+  <!-- Canonical -->
   <link rel="canonical" href="{{ request.build_absolute_uri }}">
   <meta name="robots" content="index,follow">
   <meta name="author" content="{{ post.author_display }}">
   <meta name="description" content="{{ post.title }} — Trend Maxi">
 
-  {# --- OG 기본 이미지(절대 URL) 준비 --- #}
+  <!-- OG 이미지(절대 URL) 준비 -->
   {% static 'img/og-cover.png' as DEFAULT_OG_PATH %}
-  {% with
-      BASE=request.scheme|add:"://"|add:request.get_host
-      DEFAULT_OG=BASE|add:DEFAULT_OG_PATH
-      ogimg=post.og_image|default:DEFAULT_OG
-  %}
-
-    {# Open Graph #}
+  {% with BASE=request.scheme|add:"://"|add:request.get_host %}
+  {% with ogimg=(post.og_image|default:BASE|add:DEFAULT_OG_PATH) %}
+    <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Trend Maxi">
     <meta property="og:title" content="{{ post.title }}">
@@ -29,15 +25,15 @@
     <meta property="og:image" content="{{ ogimg }}">
     <meta property="article:published_time" content="{{ post.created_at|date:'c' }}">
 
-    {# Twitter #}
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ post.title }}">
     <meta name="twitter:description" content="{{ post.title }} — Trend Maxi">
     <meta name="twitter:image" content="{{ ogimg }}">
-
+  {% endwith %}
   {% endwith %}
 
-  {# Favicons #}
+  <!-- Favicons -->
   <link rel="icon" href="{% static 'img/favicon.ico' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
