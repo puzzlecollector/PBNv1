@@ -5,6 +5,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ post.title }} · Trend Maxi</title>
+
+  {# Canonical #}
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <meta name="robots" content="index,follow">
+  <meta name="author" content="{{ post.author_display }}">
+  <meta name="description" content="{{ post.title }} — Trend Maxi">
+
+  {# 썸네일 URL 후보(본문에 img가 있으면 view에서 넘겨줄 수도) #}
+  {# 템플릿만으로는 본문에서 첫 이미지 추출이 귀찮으니, 우선 기본 OG 이미지 사용 #}
+  {% with ogimg=post.og_image|default_if_none:None %}
+  {% if not ogimg %}{% with ogimg=static 'img/og-cover.png' %}{% endwith %}{% endif %}
+
+  {# Open Graph #}
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Trend Maxi">
+  <meta property="og:title" content="{{ post.title }}">
+  <meta property="og:description" content="{{ post.title }} — Trend Maxi">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="{{ ogimg }}">
+  <meta property="article:published_time" content="{{ post.created_at|date:'c' }}">
+
+  {# Twitter #}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ post.title }}">
+  <meta name="twitter:description" content="{{ post.title }} — Trend Maxi">
+  <meta name="twitter:image" content="{{ ogimg }}">
+
+  {# Favicons #}
+  <link rel="icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
   <style>
     :root{ --brand:#6b5cff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --card:#fff; --bg:#f6f7fb; --shadow:0 10px 30px rgba(15,23,42,.06); }
     *{box-sizing:border-box}
