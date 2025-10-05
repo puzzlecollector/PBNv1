@@ -64,7 +64,24 @@ SECRET_KEY = 'django-insecure-9qn@g4pbba^(c@^4_z8y*cmzxi@v@@hoz#@b4+yd4l2pt)=1ir
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["trendmaxi.net", "www.trendmaxi.net", "54.161.10.113", "localhost", "127.0.0.1"]
+# 이미 있으면 유지
+ALLOWED_HOSTS = [
+    "trendmaxi.net", "www.trendmaxi.net",
+    "54.161.10.113", "localhost", "127.0.0.1"
+]
+
+# 1) 프록시 너머의 HTTPS를 신뢰
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# 2) CSRF가 허용할 Origin(스킴 포함해야 함)
+CSRF_TRUSTED_ORIGINS = [
+    "https://trendmaxi.net",
+    "https://www.trendmaxi.net",
+]
+
+# 3) HTTPS에서만 쿠키 전송 (지금 이미 HTTPS라면 권장)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE   = True
 
 
 # Application definition
