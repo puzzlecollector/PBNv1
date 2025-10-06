@@ -150,8 +150,6 @@
               {% if p.is_hot %}<span class="badge">HOT🔥</span>{% endif %}
               <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
               {% if p.admin_category %}<span class="meta" style="margin-left:6px">#{{ p.admin_category }}</span>{% endif %}
-
-              <span class="stat">♥ {{ p.like_count }}</span>
             </div>
 
 
@@ -160,6 +158,8 @@
               <span class="author">{{ p.author_display }}</span>
               <span class="dot">•</span>
               <span class="date">{{ p.created_at|date:"Y-m-d H:i" }}</span>
+              <span class="stat">♥ {{ p.like_count }}</span>
+              <span class="stat">💬 {{ p.comment_count }}</span>  <!-- 추가 -->
             </div>
 
           </div>
@@ -196,10 +196,6 @@
             <div class="title">
               {% if p.is_hot %}<span class="badge">HOT🔥</span>{% endif %}
               <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
-              {% if p.admin_category %}<span class="meta" style="margin-left:6px">#{{ p.admin_category }}</span>{% endif %}
-
-              <span class="stat">♥ {{ p.like_count }}</span>
-              <span class="stat">💬 {{ p.comment_count }}</span>  <!-- 추가 -->
             </div>
 
 
@@ -208,6 +204,9 @@
               <span class="author">{{ p.author_display }}</span>
               <span class="dot">•</span>
               <span class="date">{{ p.created_at|date:"Y-m-d H:i" }}</span>
+              <span class="stat">♥ {{ p.like_count }}</span>
+              <span class="stat">💬 {{ p.comment_count }}</span>  <!-- 추가 -->
+              {% if p.admin_category %}<span class="meta" style="margin-left:6px">#{{ p.admin_category }}</span>{% endif %}
             </div>
 
           </div>
