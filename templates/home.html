@@ -4,46 +4,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Trend Maxi — 트렌드 & 포럼</title>
 
-  {# 기본 메타 #}
+  <!-- ===== Title / Basic SEO ===== -->
+  <title>Trend Maxi — 트렌드 & 포럼 | 트렌드·구글 트렌드·암호화폐·경제 뉴스·엔터테인먼트·정치·오늘의 운세</title>
   <link rel="canonical" href="{{ request.build_absolute_uri }}">
   <meta name="robots" content="index,follow">
   <meta name="author" content="Trend Maxi">
-  <meta name="description" content="Trend Maxi — 트렌드, 포럼, 시그널을 한곳에서.">
+  <meta name="publisher" content="Trend Maxi">
+  <meta name="description" content="Trend Maxi — 트렌드, 포럼, 시그널을 한곳에서. 구글 트렌드, 암호화폐, 경제 뉴스, 엔터테인먼트, 정치, 오늘의 운세까지 복합 이슈를 빠르게 모아보고 토론하세요.">
+  <meta name="keywords" content="Trend Maxi, 트렌드, 구글 트렌드, 암호화폐, 비트코인, 이더리움, 경제 뉴스, 주식, 거시경제, 환율, 엔터테인먼트, 연예, 정치, 오늘의 운세, 포럼, 커뮤니티, 이슈, 공지, 게시판, PBN, 백링크">
 
-  {# Open Graph #}
+  <!-- Helpful client hints -->
+  <meta name="theme-color" content="#6b5cff">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="dns-prefetch" href="//{{ request.get_host }}">
+  <link rel="preconnect" href="//{{ request.get_host }}" crossorigin>
+
+  <!-- ===== Hreflang (ko 기본) ===== -->
+  <link rel="alternate" hreflang="ko" href="{{ request.build_absolute_uri }}">
+  <link rel="alternate" hreflang="x-default" href="{{ request.build_absolute_uri }}">
+
+  <!-- ===== Open Graph ===== -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Trend Maxi">
+  <meta property="og:locale" content="ko_KR">
   <meta property="og:title" content="Trend Maxi — 트렌드 & 포럼">
-  <meta property="og:description" content="트렌드, 포럼, 시그널을 한곳에서.">
+  <meta property="og:description" content="트렌드, 포럼, 시그널을 한곳에서. 구글 트렌드·암호화폐·경제 뉴스·엔터·정치·운세.">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
-  <meta property="og:image" content="{% static 'img/og-cover.png' %}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-cover.png' %}">
+  <meta property="og:image:secure_url" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-cover.png' %}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Trend Maxi 브랜드 커버 이미지">
 
-  {# Twitter #}
+  <!-- ===== Twitter Card ===== -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Trend Maxi — 트렌드 & 포럼">
-  <meta name="twitter:description" content="트렌드, 포럼, 시그널을 한곳에서.">
-  <meta name="twitter:image" content="{% static 'img/twitter-card.png' %}">
+  <meta name="twitter:description" content="트렌드, 포럼, 시그널을 한곳에서. 구글 트렌드·암호화폐·경제 뉴스·엔터·정치·운세.">
+  <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/twitter-card.png' %}">
 
-  {# Favicons #}
+  <!-- ===== Favicons / PWA bits ===== -->
   <link rel="icon" href="{% static 'img/favicon.ico' %}">
   <link rel="icon" type="image/png" sizes="48x48" href="{% static 'img/favicon-48x48.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
-  <link rel="manifest" href="{% static 'img/site.webmanifest' %}" crossorigin="use-credentials" disabled>
+  <!-- 필요 시 manifest 켜기 -->
+  <!-- <link rel="manifest" href="{% static 'img/site.webmanifest' %}" crossorigin="use-credentials"> -->
 
-  {# JSON-LD #}
+  <!-- ===== JSON-LD: Organization ===== -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
     "@type":"Organization",
     "name":"Trend Maxi",
-    "url":"{{ request.build_absolute_uri }}",
-    "logo":"{% static 'img/logo-square-1024.png' %}"
+    "url":"{{ request.scheme }}://{{ request.get_host }}",
+    "logo":"{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo-square-1024.png' %}",
+    "sameAs":[
+      "https://x.com/your_handle",
+      "https://instagram.com/your_handle",
+      "https://t.me/your_handle"
+    ]
+  }
+  </script>
+
+  <!-- ===== JSON-LD: WebSite + SearchAction (사이트 검색 노출용) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Trend Maxi",
+    "url":"{{ request.scheme }}://{{ request.get_host }}",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"{{ request.scheme }}://{{ request.get_host }}/search?q={query}",
+      "query-input":"required name=query"
+    }
   }
   </script>
   <style>
