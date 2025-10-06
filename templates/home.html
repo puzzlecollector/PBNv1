@@ -108,22 +108,19 @@
     .page-btn.active{border-color:var(--brand); color:var(--brand); font-weight:800; background:#f5f7ff}
     .page-btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
 
-    .like-badge{
+    .stat{
       display:inline-flex; align-items:center; gap:6px;
       padding:2px 8px; border-radius:999px;
       font-size:12px; color:#475569; background:#eef2ff; border:1px solid #e2e8f0;
+      margin-left:6px;
     }
-    .like-badge svg{ width:12px; height:12px; }
-
     .submeta{
-      grid-column: 1 / -1;     /* 2행 전체 너비 차지 */
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      gap: 6px;
-      align-items: center;
+      grid-column: 1 / -1;        /* 2행 레이아웃을 쓰는 경우 전체폭 차지 */
+      color:#64748b; font-size:12px; margin-top:2px;
+      display:flex; align-items:center; gap:6px;
     }
-    .submeta span[aria-hidden="true"]{ opacity:.6; } /* • 점 색 살짝 연하게 */
+    .submeta .dot{ opacity:.6; }
+
 
     @media (max-width:900px){ .row{grid-template-columns:1fr 86px 82px} .tabs{gap:6px} }
   </style>
@@ -153,14 +150,18 @@
               {% if p.is_hot %}<span class="badge">HOT🔥</span>{% endif %}
               <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
               {% if p.admin_category %}<span class="meta" style="margin-left:6px">#{{ p.admin_category }}</span>{% endif %}
-              <span class="like-count">♥ {{ p.like_count }}</span>
+
+              <span class="stat">♥ {{ p.like_count }}</span>
             </div>
+
 
             <!-- 기존: <div class="author">...</div><div class="meta">...</div> 를 교체 -->
             <div class="submeta">
-              {{ p.author_display }} <span aria-hidden="true">•</span>
-              {{ p.created_at|date:"Y-m-d H:i" }}
+              <span class="author">{{ p.author_display }}</span>
+              <span class="dot">•</span>
+              <span class="date">{{ p.created_at|date:"Y-m-d H:i" }}</span>
             </div>
+
           </div>
         {% empty %}
           <div class="row"><div class="title"><span class="meta">작성된 글이 없습니다.</span></div><div></div><div></div></div>
@@ -196,14 +197,19 @@
               {% if p.is_hot %}<span class="badge">HOT🔥</span>{% endif %}
               <a href="{{ p.get_absolute_url }}">{{ p.title }}</a>
               {% if p.admin_category %}<span class="meta" style="margin-left:6px">#{{ p.admin_category }}</span>{% endif %}
-              <span class="like-count">♥ {{ p.like_count }}</span>
+
+              <span class="stat">♥ {{ p.like_count }}</span>
+              <span class="stat">💬 {{ p.comment_count }}</span>  <!-- 추가 -->
             </div>
+
 
             <!-- 기존: <div class="author">...</div><div class="meta">...</div> 를 교체 -->
             <div class="submeta">
-              {{ p.author_display }} <span aria-hidden="true">•</span>
-              {{ p.created_at|date:"Y-m-d H:i" }}
+              <span class="author">{{ p.author_display }}</span>
+              <span class="dot">•</span>
+              <span class="date">{{ p.created_at|date:"Y-m-d H:i" }}</span>
             </div>
+
           </div>
         {% empty %}
           <div class="row"><div class="title"><span class="meta">작성된 글이 없습니다.</span></div><div></div><div></div></div>

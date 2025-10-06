@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import F
+from django.db.models import F, Count
 from .models import Post, Comment
 from .forms import CommentForm
 
@@ -17,14 +17,18 @@ def safe_int(value, default=1):
 
 
 def home(request):
-    active_tab = request.GET.get("tab", "free")  # 기본값을 free로
+    active_tab = request.GET.get("tab", "free")
     page = safe_int(request.GET.get("page", 1), 1)
 
     def q(category):
-        return Post.objects.filter(category=category).order_by("-created_at")
+        return (
+            Post.objects
+            .filter(category=category)
+            .annotate(comment_count=Count('comments'))  # ← 댓글 수 주입
+            .order_by("-created_at")
+        )
 
     def paginate(qs):
-        # get_page는 out-of-range/비정상 값도 안전하게 처리합니다.
         return Paginator(qs, 10).get_page(page)
 
     ctx = {
